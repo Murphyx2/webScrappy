@@ -12,6 +12,8 @@ def get_webpage(url, **kwargs):
         title = soup.title.string
         article_name = title.partition('|')[0]
         filename = article_name + '.txt'
+    else:
+        filename = filename + '.txt'
     filename = 'scraped_articles/' + filename
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, 'w', encoding='utf-8') as file:
@@ -21,6 +23,5 @@ def get_webpage(url, **kwargs):
 
 
 if __name__ == '__main__':
-    medium_url = ('https://medium.com/@pareto_investor/nasa-just-shut-down-quantum-computer-after-something-insane'
-                  '-happened-6ddd6ff1d105')
-    print(get_webpage(medium_url, filename='Nasa_Article'))
+    medium_url = 'https://medium.com/@subashgandyer/papa-what-is-a-neural-network-c5e5cc427c7'
+    print(get_webpage(medium_url, filename="Papa What is a Neural Network"))
