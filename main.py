@@ -1,16 +1,27 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import os
+from bs4 import BeautifulSoup
+from requests import get
 
 
-# Press the green button in the gutter to run the script.
+def get_webpage(url, **kwargs):
+    webpage_request = get(url)
+    html = webpage_request.text
+    soup = BeautifulSoup(html, 'html.parser')
+    filename = kwargs.get('filename', None)
+    if filename is None:
+        title = soup.title.string
+        article_name = title.partition('|')[0]
+        filename = article_name + '.txt'
+    else:
+        filename = filename + '.txt'
+    filename = 'scraped_articles/' + filename
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    with open(filename, 'w', encoding='utf-8') as file:
+        file.write('<! –– Article URL: ' + url + '-->')
+        file.write(soup.prettify())
+    return file.name
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    medium_url = 'https://medium.com/@subashgandyer/papa-what-is-a-neural-network-c5e5cc427c7'
+    print(get_webpage(medium_url, filename="Papa What is a Neural Network"))
